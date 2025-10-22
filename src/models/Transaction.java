@@ -1,36 +1,24 @@
 package models;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class Transaction {
 
-    protected String date;
-    protected String name;
-    protected int amount;
-    protected String id;
+    private LocalDate date;
+    private String name;
+    private int amount;
+    private UUID id;
 
-    public Transaction(String date, String name, int amount) {
+    public Transaction(LocalDate date, String name, int amount) {
         this.date = date;
         this.name = name;
         this.amount = amount;
-        this.id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID();
     }
 
-    public Transaction() {}
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public String getId() {
-        return id;
-    }
+    public LocalDate getDate() { return date; }
+    public String getName() { return name; }
+    public int getAmount() { return amount; }
+    public UUID getId() { return id; }
 }
