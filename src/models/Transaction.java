@@ -8,7 +8,7 @@ public class Transaction {
     private LocalDate date;
     private String name;
     private int amount;
-    private UUID id;
+    private final UUID id;
 
     public Transaction(LocalDate date, String name, int amount) {
         this.date = date;

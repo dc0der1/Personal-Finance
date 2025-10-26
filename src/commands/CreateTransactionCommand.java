@@ -9,8 +9,8 @@ import java.util.Scanner;
 // We get name and description from super class
 public class CreateTransactionCommand extends Command{
 
-    public CreateTransactionCommand(String name, String description, ITransactionService transactionService) {
-        super("Create transaction - ", "This command creates transaction", transactionService);
+    public CreateTransactionCommand(ITransactionService transactionService) {
+        super("Create transaction", " - This command creates a transaction", transactionService);
     }
 
     // Here we create class, we use the same method from super class but override it
@@ -47,7 +47,12 @@ public class CreateTransactionCommand extends Command{
         }
 
         // Create new transaction
-        Transaction transaction = new Transaction(date, name, amount);
-        transactionService.createTransaction(transaction);
+        try {
+            Transaction transaction = new Transaction(date, name, amount);
+            transactionService.createTransaction(transaction);
+        } catch (Exception e) {
+            System.out.println("An error occurred while creating transaction.");
+        }
+
     }
 }

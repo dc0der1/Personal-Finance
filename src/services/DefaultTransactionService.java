@@ -1,34 +1,30 @@
 package services;
 
 import models.Transaction;
-import repository.FileTransactionRepository;
+import repository.ITransactionRepository;
+
+import java.util.UUID;
 
 public class DefaultTransactionService implements ITransactionService{
 
-    private FileTransactionRepository fileTransactionRepository;
+    private final ITransactionRepository fileTransactionRepository;
+
+    public DefaultTransactionService(ITransactionRepository fileTransactionRepository) {
+        this.fileTransactionRepository = fileTransactionRepository;
+    }
 
     // CREATE transaction
     @Override
-    public void createTransaction(Transaction transaction) {
+    public void createTransaction(Transaction transaction) throws Exception{
         fileTransactionRepository.save(transaction);
     }
 
     // DELETE
     @Override
-    public void deleteTransaction() {
-
-    }
-
-    // Read / GET
-    @Override
-    public void readTransaction() {
-
-    }
-
-    // Update / PUT
-    @Override
-    public void updateTransaction() {
-
+    public Transaction deleteTransaction(UUID id) {
+        Transaction transaction = fileTransactionRepository.findById(id);
+        fileTransactionRepository.delete(id);
+        return transaction;
     }
 
     // Find by ID

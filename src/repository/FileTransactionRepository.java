@@ -2,43 +2,64 @@ package repository;
 
 import models.Transaction;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class FileTransactionRepository implements ITransactionRepository{
 
-    private final String EXTENSION = ".txt";
+    private static final String EXTENSION = ".txt";
 
     @Override
-    public void save(Transaction transaction) {
+    public Transaction findById(UUID transaction) {
+        String fileName = getFileName(transaction);
 
-        String fileName = transaction.getId().toString();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            reader.readLine();
+            LocalDate date = LocalDate.parse(reader.readLine());
+            String name = reader.readLine();
+            int amount = Integer.parseInt(reader.readLine());
 
-        File file = new File(fileName);
+            return new Transaction(date, name, amount);
+        } catch (IOException e) {
+            System.out.println("Error occurred while reading file.");
+            e.printStackTrace(System.out);
+            throw new RuntimeException(e);
+        }
+    }
 
-        try (FileWriter writer = new FileWriter(file)) {
-            String date = String.valueOf(transaction.getDate());
-            writer.write(date + "\n" + transaction.getName() + "\n" + transaction.getAmount());
+    @Override
+    public void save(Transaction transaction) throws Exception{
 
-        } catch (Exception e) {
-            System.out.println("An error occurred");
+        String fileName = getFileName(transaction.getId());
+
+        try (BufferedWriter stream = new BufferedWriter(new FileWriter(fileName))) {
+            String date = transaction.getDate().toString();
+            String name = transaction.getName();
+            String amount = String.valueOf(transaction.getAmount());
+
+            stream
+                    .append(transaction.getId().toString())
+                    .append("\n")
+                    .append(date)
+                    .append("\n")
+                    .append(name)
+                    .append("\n")
+                    .append(amount);
         }
 
     }
 
     @Override
-    public void delete() {
+    public void delete(UUID id) {
+        String fileName = getFileName(id);
+
+        File file = new File(fileName);
+        boolean ignored = file.delete();
 
     }
 
-    @Override
-    public void update() {
-
-    }
-
-    @Override
-    public void read() {
-
+    private static String getFileName(UUID transactionId) {
+        return transactionId.toString() + EXTENSION;
     }
 }
