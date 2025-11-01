@@ -4,6 +4,8 @@ import models.Transaction;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class FileTransactionRepository implements ITransactionRepository{
@@ -11,8 +13,42 @@ public class FileTransactionRepository implements ITransactionRepository{
     private static final String EXTENSION = ".txt";
 
     @Override
-    public Transaction findById(UUID transaction) {
-        String fileName = getFileName(transaction);
+    public List<Transaction> findAll() {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+
+        File files = new File("./");
+        File[] transactionFiles = files.listFiles();
+
+        if (transactionFiles == null) {
+            return transactions;
+        }
+
+        for (File transactionFile : transactionFiles) {
+            String name = transactionFile.getName();
+
+            if (!name.endsWith(EXTENSION)) {
+                continue;
+            }
+
+            String fileName = name.substring(0, name.length() - EXTENSION.length());
+
+            UUID transactionId;
+            try {
+                transactionId = UUID.fromString(fileName);
+            } catch (Exception ignored) {
+                continue;
+            }
+
+            Transaction transaction = findById(transactionId);
+            transactions.add(transaction);
+        }
+
+        return transactions;
+    }
+
+    @Override
+    public Transaction findById(UUID transactionId) {
+        String fileName = getFileName(transactionId);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             reader.readLine();

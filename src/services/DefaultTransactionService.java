@@ -4,6 +4,7 @@ import models.Transaction;
 import repository.ITransactionRepository;
 
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class DefaultTransactionService implements ITransactionService{
 
@@ -31,6 +32,18 @@ public class DefaultTransactionService implements ITransactionService{
     @Override
     public void findTransactionById(Transaction transaction) {
 
+    }
+
+    @Override
+    public Stream<Transaction> searchTransactions(String id) {
+        return getTransactions()
+                .filter((transaction) -> transaction.getName().toLowerCase().contains(id.toLowerCase()))
+                .sorted((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
+    }
+
+    @Override
+    public Stream<Transaction> getTransactions() {
+        return fileTransactionRepository.findAll().stream();
     }
 
 }

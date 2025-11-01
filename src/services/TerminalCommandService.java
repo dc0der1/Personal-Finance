@@ -12,7 +12,6 @@ public class TerminalCommandService implements ICommandService{
     @Override
     public void registerCommand(Command command) {
         this.commands.add(command);
-        System.out.println("--- Registered the command ---" + command.getName());
     }
 
     @Override

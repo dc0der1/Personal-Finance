@@ -17,6 +17,14 @@ public class Transaction {
         this.id = UUID.randomUUID();
     }
 
+    @Override
+    public String toString() {
+        return "Date: " + this.date +
+                "\nName: " + this.name +
+                "\nAmount: " + this.amount +
+                "\nID: " + this.id;
+    }
+
     public LocalDate getDate() { return date; }
     public String getName() { return name; }
     public int getAmount() { return amount; }

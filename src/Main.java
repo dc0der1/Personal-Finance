@@ -1,6 +1,7 @@
 
 import commands.CreateTransactionCommand;
 import commands.DeleteTransactionCommand;
+import commands.SearchTransactionCommand;
 import repository.FileTransactionRepository;
 import services.DefaultTransactionService;
 import services.ICommandService;
@@ -15,6 +16,7 @@ public class Main {
 
         commandService.registerCommand(new CreateTransactionCommand(transactionService));
         commandService.registerCommand(new DeleteTransactionCommand(transactionService));
+        commandService.registerCommand(new SearchTransactionCommand(transactionService));
 
         if (commandService instanceof TerminalCommandService service) {
             service.start();
