@@ -1,10 +1,12 @@
 package commands;
 
 import models.Transaction;
+import models.TransactionType;
 import services.ITransactionService;
 
 import java.time.LocalDate;
 import java.util.Scanner;
+import java.util.function.Function;
 
 // We get name and description from super class
 public class CreateTransactionCommand extends Command{
@@ -49,6 +51,10 @@ public class CreateTransactionCommand extends Command{
         // Create new transaction
         try {
             Transaction transaction = new Transaction(date, name, amount);
+
+            // Amount determines whether its EXPENSE, EARNING or NEITHER
+            transaction.setTransactionType(TransactionType.fromAmount(amount));
+
             transactionService.createTransaction(transaction);
         } catch (Exception e) {
             System.out.println("An error occurred while creating transaction.");

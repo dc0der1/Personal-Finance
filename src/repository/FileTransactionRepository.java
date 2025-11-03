@@ -1,6 +1,7 @@
 package repository;
 
 import models.Transaction;
+import models.TransactionType;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -55,8 +56,9 @@ public class FileTransactionRepository implements ITransactionRepository{
             LocalDate date = LocalDate.parse(reader.readLine());
             String name = reader.readLine();
             int amount = Integer.parseInt(reader.readLine());
+            TransactionType transactionType = TransactionType.valueOf(reader.readLine());
 
-            return new Transaction(date, name, amount);
+            return new Transaction(date, name, amount, transactionType);
         } catch (IOException e) {
             System.out.println("Error occurred while reading file.");
             e.printStackTrace(System.out);
@@ -73,6 +75,7 @@ public class FileTransactionRepository implements ITransactionRepository{
             String date = transaction.getDate().toString();
             String name = transaction.getName();
             String amount = String.valueOf(transaction.getAmount());
+            String transactionType = String.valueOf(transaction.getTransactionType());
 
             stream
                     .append(transaction.getId().toString())
@@ -81,7 +84,9 @@ public class FileTransactionRepository implements ITransactionRepository{
                     .append("\n")
                     .append(name)
                     .append("\n")
-                    .append(amount);
+                    .append(amount)
+                    .append("\n")
+                    .append(transactionType);
         }
 
     }
