@@ -35,9 +35,9 @@ public class DefaultTransactionService implements ITransactionService{
     }
 
     @Override
-    public Stream<Transaction> searchTransactions(String id) {
+    public Stream<Transaction> searchTransactions(String query) {
         return getTransactions()
-                .filter((transaction) -> transaction.getName().toLowerCase().contains(id.toLowerCase()))
+                .filter((transaction) -> transaction.getName().toLowerCase().contains(query.toLowerCase()))
                 .sorted((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
     }
 

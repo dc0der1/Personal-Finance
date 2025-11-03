@@ -1,8 +1,5 @@
 
-import commands.CreateTransactionCommand;
-import commands.DeleteTransactionCommand;
-import commands.ListAllTransactionsCommand;
-import commands.SearchTransactionCommand;
+import commands.*;
 import repository.FileTransactionRepository;
 import services.DefaultTransactionService;
 import services.ICommandService;
@@ -19,6 +16,7 @@ public class Main {
         commandService.registerCommand(new DeleteTransactionCommand(transactionService));
         commandService.registerCommand(new SearchTransactionCommand(transactionService));
         commandService.registerCommand(new ListAllTransactionsCommand(transactionService));
+        commandService.registerCommand(new ListEarningsCommand(transactionService));
 
         if (commandService instanceof TerminalCommandService service) {
             service.start();

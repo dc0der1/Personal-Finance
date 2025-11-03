@@ -16,11 +16,11 @@ public class SearchTransactionCommand extends Command{
     public void execute() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter transaction name: ");
-        String id = scanner.nextLine();
+        String query = scanner.nextLine();
 
         Stream<Transaction> stream;
         try {
-            stream = transactionService.searchTransactions(id);
+            stream = transactionService.searchTransactions(query);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error while searching for transactions!");
