@@ -17,6 +17,8 @@ public class Main {
         commandService.registerCommand(new SearchTransactionCommand(transactionService));
         commandService.registerCommand(new ListAllTransactionsCommand(transactionService));
         commandService.registerCommand(new ListEarningsCommand(transactionService));
+        commandService.registerCommand(new GetBalance(transactionService));
+        commandService.registerCommand(new ListExpensesCommand(transactionService));
 
         if (commandService instanceof TerminalCommandService service) {
             service.start();

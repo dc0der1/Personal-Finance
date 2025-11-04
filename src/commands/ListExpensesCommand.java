@@ -7,14 +7,16 @@ import services.ITransactionService;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.temporal.WeekFields;
-import java.util.*;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ListEarningsCommand extends Command{
+public class ListExpensesCommand extends Command {
 
-    public ListEarningsCommand(ITransactionService transactionService) {
-        super("Earnings", " - This command lists transaction earnings", transactionService);
+    public ListExpensesCommand(ITransactionService transactionService) {
+        super("Expenses", " - This command lists all expenses", transactionService);
     }
 
     @Override
@@ -25,30 +27,30 @@ public class ListEarningsCommand extends Command{
         String input = scanner.nextLine();
 
         if (input.equalsIgnoreCase("daily")) {
-            displayDailyEarnings();
+            displayDailyExpenses();
         } else if (input.equalsIgnoreCase("weekly")) {
-            displayWeeklyEarnings();
+            displayWeeklyExpenses();
         } else if (input.equalsIgnoreCase("monthly")) {
-            displayMonthlyEarnings();
+            displayMonthlyExpenses();
         } else if (input.equalsIgnoreCase("yearly")) {
-            displayYearlyEarnings();
+            displayYearlyExpenses();
         }
     }
 
-    public void displayDailyEarnings() {
+    public void displayDailyExpenses() {
         try {
             Stream<Transaction> transactions = transactionService.getTransactions();
             // Filters out expense types
             // Groups the dates and sums up the amount of that date
-            Map<LocalDate, Integer> dailyEarnings = transactions
+            Map<LocalDate, Integer> dailyExpenses = transactions
                     // Filters out expense types
-                    .filter(transaction -> transaction.getTransactionType() == TransactionType.EARNING)
+                    .filter(transaction -> transaction.getTransactionType() == TransactionType.EXPENSE)
                     // Groups the dates and sums up the amount of that date
                     .collect(Collectors.groupingBy(
-                        Transaction::getDate, Collectors.summingInt(Transaction::getAmount)
+                            Transaction::getDate, Collectors.summingInt(Transaction::getAmount)
                     ));
 
-            dailyEarnings.forEach((date, total) ->
+            dailyExpenses.forEach((date, total) ->
                     System.out.println("Date: " + date + ", Total earnings this day: " + total)
             );
         } catch (Exception e) {
@@ -56,18 +58,18 @@ public class ListEarningsCommand extends Command{
         }
     }
 
-    public void displayWeeklyEarnings() {
+    public void displayWeeklyExpenses() {
         WeekFields weekFields = WeekFields.of(Locale.getDefault());
 
         try {
             Stream<Transaction> transactions = transactionService.getTransactions();
 
-            Map<Integer, Integer> weeklyEarnings = transactions
-                    .filter(transaction -> transaction.getTransactionType() == TransactionType.EARNING)
+            Map<Integer, Integer> weeklyExpenses = transactions
+                    .filter(transaction -> transaction.getTransactionType() == TransactionType.EXPENSE)
                     .collect(Collectors.groupingBy(
-                        transaction -> transaction.getDate().get(weekFields.weekOfWeekBasedYear()), Collectors.summingInt(Transaction::getAmount)
+                            transaction -> transaction.getDate().get(weekFields.weekOfWeekBasedYear()), Collectors.summingInt(Transaction::getAmount)
                     ));
-            weeklyEarnings.forEach((weekNumber, total) ->
+            weeklyExpenses.forEach((weekNumber, total) ->
                     System.out.println("Week: " + weekNumber + ", Total earnings this week: " + total)
             );
         } catch (Exception e) {
@@ -75,17 +77,17 @@ public class ListEarningsCommand extends Command{
         }
     }
 
-    public void displayMonthlyEarnings() {
+    public void displayMonthlyExpenses() {
 
         try {
             Stream<Transaction> transactions = transactionService.getTransactions();
 
-            Map<Month, Integer> weeklyEarnings = transactions
-                    .filter(transaction -> transaction.getTransactionType() == TransactionType.EARNING)
+            Map<Month, Integer> monthlyExpenses = transactions
+                    .filter(transaction -> transaction.getTransactionType() == TransactionType.EXPENSE)
                     .collect(Collectors.groupingBy(
                             transaction -> transaction.getDate().getMonth(), Collectors.summingInt(Transaction::getAmount)
                     ));
-            weeklyEarnings.forEach((month, total) ->
+            monthlyExpenses.forEach((month, total) ->
                     System.out.println("Week: " + month + ", Total earnings this month: " + total)
             );
         } catch (Exception e) {
@@ -93,20 +95,21 @@ public class ListEarningsCommand extends Command{
         }
     }
 
-    public void displayYearlyEarnings() {
+    public void displayYearlyExpenses() {
         try {
             Stream<Transaction> transactions = transactionService.getTransactions();
 
-            Map<Integer, Integer> weeklyEarnings = transactions
-                    .filter(transaction -> transaction.getTransactionType() == TransactionType.EARNING)
+            Map<Integer, Integer> yearlyExpenses = transactions
+                    .filter(transaction -> transaction.getTransactionType() == TransactionType.EXPENSE)
                     .collect(Collectors.groupingBy(
                             transaction -> transaction.getDate().getYear(), Collectors.summingInt(Transaction::getAmount)
                     ));
-            weeklyEarnings.forEach((year, total) ->
+            yearlyExpenses.forEach((year, total) ->
                     System.out.println("Week: " + year + ", Total earnings this year: " + total)
             );
         } catch (Exception e) {
             System.out.println("Error occurred while listing yearly earnings.");
         }
     }
+
 }

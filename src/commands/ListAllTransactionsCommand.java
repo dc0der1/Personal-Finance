@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class ListAllTransactionsCommand extends Command{
 
     public ListAllTransactionsCommand(ITransactionService transactionService) {
-        super("List transactions", " - This command lists all transactions", transactionService);
+        super("List", " - This command lists all transactions", transactionService);
     }
 
     @Override

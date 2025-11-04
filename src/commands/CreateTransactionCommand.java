@@ -6,13 +6,12 @@ import services.ITransactionService;
 
 import java.time.LocalDate;
 import java.util.Scanner;
-import java.util.function.Function;
 
 // We get name and description from super class
 public class CreateTransactionCommand extends Command{
 
     public CreateTransactionCommand(ITransactionService transactionService) {
-        super("Create transaction", " - This command creates a transaction", transactionService);
+        super("Create", " - This command creates a transaction", transactionService);
     }
 
     // Here we create class, we use the same method from super class but override it
